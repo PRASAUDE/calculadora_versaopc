@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRASAÚDE - Dashboard de Comissões e Premiações</title>
+    <meta name="description" content="Sistema completo de cálculo de comissões e premiações PRASAÚDE">
+    <meta name="keywords" content="PRASAÚDE, comissões, premiações, vendas, dashboard, marketing, multinível">
+    <meta name="author" content="PRASAÚDE">
+    <meta name="robots" content="index, follow">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
+    
+    <!-- Google Fonts para melhor tipografia -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #8B2CA0;
+            --secondary-color: #6A1B7A;
+            --accent-color: #FFD700;
+            --success-color: #28a745;
+            --info-color: #17a2b8;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --border-color: #e2e8f0;
+            --shadow-light: 0 4px 15px rgba(0,0,0,0.08);
+            --shadow-medium: 0 8px 25px rgba(0,0,0,0.15);
+            --shadow-heavy: 0 20px 40px rgba(0,0,0,0.2);
+            --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            --gradient-background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --border-radius: 15px;
+            --border-radius-large: 20px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--gradient-background);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+            color: var(--dark-color);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--border-radius-large);
+            box-shadow: var(--shadow-heavy);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            gap: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            width: 90px;
+            height: 90px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            border: 4px solid rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: conic-gradient(from 0deg, var(--accent-color), var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            z-index: -1;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo .dollar {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--accent-color);
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+            z-index: 2;
+        }
+
+        .brand-text {
+            font-size: 3.2rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+            background: linear-gradient(45deg, white, var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            font-weight: 500;
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-content {
+            padding: 40px 30px;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7ff 0%, #e8f2ff 100%);
+            border-radius: var(--border-radius);
+            border: 2px solid var(--border-color);
+            box-shadow: var(--shadow-light);
+        }
+
+        .calculation-tabs {
+            display: flex;
+            margin-bottom: 25px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 15px;
+            padding: 6px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 20px 30px;
+            border: none;
+            background: transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 1.3rem;
+            transition: var(--transition);
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .tab-button:hover::before {
+            left: 100%;
+        }
+
+        .tab-button.active {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 6px 20px rgba(139, 44, 160, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .tab-button:hover:not(.active) {
+            background: rgba(139, 44, 160, 0.1);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-group label {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .control-group input {
+            padding: 15px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: var(--transition);
+            background: white;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .control-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(139, 44, 160, 0.1), inset 0 2px 5px rgba(0,0,0,0.05);
+            transform: translateY(-1px);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: var(--border-radius-large);
+            padding: 35px;
+            box-shadow: var(--shadow-medium);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-color), #667eea, #4ECDC4, #45B7D1, #F093FB);
+            background-size: 300% 100%;
+            animation: gradient-move 3s ease infinite;
+        }
+
+        @keyframes gradient-move {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .card h3 {
+            color: var(--dark-color);
+            margin-bottom: 30px;
+            font-size: 1.6rem;
+            font-weight: 900;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .card h3::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 30px;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+        }
+
+        .commission-table, .prize-table, .network-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            background: white;
+        }
+
+        .commission-table th, .commission-table td,
+        .prize-table th, .prize-table td,
+        .network-table th, .network-table td {
+            padding: 20px 25px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 700;
+            font-size: 1.05rem;
+            line-height: 1.5;
+        }
+
+        .commission-table th, .prize-table th, .network-table th {
+            background: var(--gradient-primary);
+            font-weight: 800;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.95rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .level-1 { background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%); color: #FFFFFF; font-weight: 800; font-size: 1.1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .level-2 { background: linear-gradient(135deg, #27AE60 0%, #2ECC71 100%); color: #FFFFFF; font-weight: 800; font-size: 1.1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .level-3 { background: linear-gradient(135deg, #E67E22 0%, #F39C12 100%); color: #FFFFFF; font-weight: 800; font-size: 1.1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .level-4 { background: linear-gradient(135deg, #8E44AD 0%, #9B59B6 100%); color: #FFFFFF; font-weight: 800; font-size: 1.1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .level-5 { background: linear-gradient(135deg, #3498DB 0%, #5DADE2 100%); color: #FFFFFF; font-weight: 800; font-size: 1.1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+
+        .prize-table tbody tr:nth-child(odd) {
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+        }
+
+        .prize-table tbody tr:nth-child(even) {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+        .prize-table tbody tr:hover,
+        .network-table tbody tr:hover,
+        .commission-table tbody tr:hover {
+            background: linear-gradient(135deg, #e8f2ff 0%, #dbeafe 100%);
+            transform: translateY(-2px);
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .prize-achieved {
+            background: linear-gradient(135deg, var(--success-color) 0%, #38a169 100%);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: inline-block;
+            margin: 3px;
+            box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+            transition: var(--transition);
+        }
+
+        .prize-achieved:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .summary-card {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow-light);
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transition: var(--transition);
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .summary-card:hover::before {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .summary-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            opacity: 0.95;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+
+        .summary-card .value {
+            font-size: 2rem;
+            font-weight: 900;
+            position: relative;
+            z-index: 2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* ==================== SEÇÃO DA REDE CUSTOMIZADA ==================== */
+        .network-section {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: var(--border-radius);
+            padding: 35px;
+            margin-top: 30px;
+            box-shadow: var(--shadow-light);
+        }
+
+        .network-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-bottom: 35px;
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+        }
+
+        .network-level-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid var(--border-color);
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .network-level-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 44, 160, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .network-level-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 25px rgba(139, 44, 160, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .network-level-card:hover::before {
+            left: 100%;
+        }
+
+        .network-level-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .network-level-title {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .network-level-badge {
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .badge-level-2 { background: linear-gradient(135deg, #27AE60 0%, #2ECC71 100%); }
+        .badge-level-3 { background: linear-gradient(135deg, #E67E22 0%, #F39C12 100%); }
+        .badge-level-4 { background: linear-gradient(135deg, #8E44AD 0%, #9B59B6 100%); }
+        .badge-level-5 { background: linear-gradient(135deg, #3498DB 0%, #5DADE2 100%); }
+
+        .network-level-subtitle {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        .network-level-input {
+            flex: 0 0 140px;
+            margin-left: 25px;
+        }
+
+        .network-level-input input {
+            width: 100%;
+            padding: 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+            transition: var(--transition);
+            background: white;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .network-level-input input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(139, 44, 160, 0.1), inset 0 2px 5px rgba(0,0,0,0.05);
+            transform: translateY(-1px);
+        }
+
+        .network-table {
+            margin-top: 30px;
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .network-results-summary {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            margin-top: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+        }
+
+        .network-results-summary::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .network-results-summary h4 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            opacity: 0.95;
+            font-weight: 800;
+            position: relative;
+            z-index: 2;
+        }
+
+        .network-results-summary .total-value {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--accent-color);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+            position: relative;
+            z-index: 2;
+        }
+
+        .total-section {
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            margin-top: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .total-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        .total-section h3 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            font-weight: 900;
+            position: relative;
+            z-index: 2;
+        }
+
+        .final-total {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--accent-color);
+            text-shadow: 3px 3px 8px rgba(0,0,0,0.4);
+            position: relative;
+            z-index: 2;
+        }
+
+        .percentage-section {
+            margin-top: 30px;
+            padding: 35px;
+            background: linear-gradient(135deg, var(--accent-color), #FFA500);
+            border-radius: var(--border-radius-large);
+            box-shadow: 0 12px 35px rgba(255, 215, 0, 0.4);
+            border: 4px solid #FFF;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .percentage-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: pulse 5s ease-in-out infinite;
+        }
+
+        .percentage-title {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .percentage-value {
+            font-size: 4.5rem;
+            font-weight: 900;
+            color: var(--primary-color);
+            text-align: center;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .percentage-explanation {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-top: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .action-section {
+            text-align: center;
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--light-color) 0%, #e9ecef 100%);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+        }
+
+        .action-section h4 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            font-weight: 900;
+        }
+
+        .pdf-button {
+            background: linear-gradient(135deg, #FF4444 0%, #CC0000 100%) !important;
+            color: white !important;
+            border: 4px solid white !important;
+            padding: 20px 40px !important;
+            border-radius: var(--border-radius) !important;
+            font-size: 1.4rem !important;
+            font-weight: 900 !important;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(255, 68, 68, 0.4) !important;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 15px;
+            display: inline-block;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pdf-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .pdf-button:hover {
+            background: linear-gradient(135deg, #FF6666 0%, #EE0000 100%) !important;
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(255, 68, 68, 0.6) !important;
+        }
+
+        .pdf-button:hover::before {
+            left: 100%;
+        }
+
+        .alert {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            color: var(--dark-color);
+            padding: 20px 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 6px solid #fdcb6e;
+            font-weight: 600;
+            box-shadow: var(--shadow-light);
+            position: relative;
+        }
+
+        .alert::before {
+            content: '⚠️';
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ==================== RESPONSIVIDADE MOBILE ==================== */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                border-radius: var(--border-radius);
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .logo-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .logo {
+                width: 70px;
+                height: 70px;
+            }
+
+            .logo .dollar {
+                font-size: 2.5rem;
+            }
+
+            .brand-text {
+                font-size: 2.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+                margin-bottom: 10px;
+            }
+
+            .header p {
+                font-size: 1.1rem;
+            }
+
+            .main-content {
+                padding: 25px 15px;
+            }
+
+            .controls {
+                padding: 25px 20px;
+                gap: 20px;
+            }
+
+            .tab-button {
+                padding: 18px 15px;
+                font-size: 1rem;
+            }
+
+            .control-group input {
+                padding: 18px;
+                font-size: 1.2rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .card {
+                padding: 25px 20px;
+                border-radius: var(--border-radius);
+            }
+
+            .card h3 {
+                font-size: 1.3rem;
+                margin-bottom: 20px;
+            }
+
+            /* ===== SEÇÃO DA REDE RESPONSIVA ===== */
+            .network-controls {
+                padding: 25px 20px;
+                gap: 20px;
+            }
+
+            .network-level-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .network-level-info {
+                align-items: center;
+            }
+
+            .network-level-input {
+                flex: none;
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .network-level-input input {
+                padding: 22px;
+                font-size: 1.3rem;
+            }
+
+            .network-level-title {
+                justify-content: center;
+                font-size: 1.2rem;
+            }
+
+            /* ===== TABELAS RESPONSIVAS - LAYOUT VERTICAL ===== */
+            
+            .commission-table, .prize-table, .network-table {
+                display: block;
+                width: 100%;
+                box-shadow: none;
+            }
+
+            .commission-table thead, .prize-table thead, .network-table thead {
+                display: none;
+            }
+
+            .commission-table tbody, .prize-table tbody, .network-table tbody {
+                display: block;
+            }
+
+            .commission-table tr, .prize-table tr, .network-table tr {
+                display: block;
+                margin-bottom: 20px;
+                background: white;
+                border-radius: 15px;
+                box-shadow: var(--shadow-light);
+                padding: 20px;
+                border: 1px solid var(--border-color);
+            }
+
+            .commission-table td, .prize-table td, .network-table td {
+                display: block;
+                padding: 10px 0;
+                border: none;
+                text-align: left;
+                font-size: 1rem;
+                position: relative;
+                padding-left: 0;
+            }
+
+            .commission-table td:before, .prize-table td:before, .network-table td:before {
+                content: attr(data-label);
+                font-weight: 800;
+                color: #666;
+                display: block;
+                font-size: 0.85rem;
+                margin-bottom: 8px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            /* Preservar as cores dos níveis em mobile */
+            .network-table .level-1,
+            .network-table .level-2,
+            .network-table .level-3,
+            .network-table .level-4,
+            .network-table .level-5,
+            .commission-table .level-1,
+            .commission-table .level-2,
+            .commission-table .level-3,
+            .commission-table .level-4,
+            .commission-table .level-5 {
+                color: white;
+                padding: 10px 15px;
+                border-radius: 10px;
+                margin: 8px 0;
+                font-weight: 800;
+                text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            }
+
+            /* Ajustes nos cards de resumo */
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .summary-card {
+                padding: 25px 20px;
+            }
+
+            .summary-card h4 {
+                font-size: 1.1rem;
+            }
+
+            .summary-card .value {
+                font-size: 1.6rem;
+            }
+
+            .network-section {
+                padding: 25px 20px;
+            }
+
+            .network-results-summary {
+                padding: 25px 20px;
+            }
+
+            .network-results-summary h4 {
+                font-size: 1.2rem;
+            }
+
+            .network-results-summary .total-value {
+                font-size: 2.2rem;
+            }
+
+            .total-section {
+                padding: 30px 25px;
+                margin-top: 30px;
+            }
+
+            .total-section h3 {
+                font-size: 1.5rem;
+                margin-bottom: 25px;
+            }
+
+            .final-total {
+                font-size: 2.8rem;
+                margin: 25px 0;
+            }
+
+            .percentage-section {
+                padding: 30px 25px;
+            }
+
+            .percentage-title {
+                font-size: 1.3rem;
+            }
+
+            .percentage-value {
+                font-size: 3.5rem;
+            }
+
+            .percentage-explanation {
+                font-size: 1.1rem;
+            }
+
+            .pdf-button {
+                width: 100% !important;
+                margin: 15px 0 !important;
+                padding: 25px 30px !important;
+                font-size: 1.3rem !important;
+            }
+
+            .alert {
+                padding: 18px;
+                font-size: 1rem;
+            }
+
+            .prize-achieved {
+                font-size: 0.85rem;
+                padding: 8px 15px;
+                margin: 4px;
+            }
+
+            .action-section {
+                padding: 25px 20px;
+            }
+        }
+
+        /* Melhorias para telas pequenas */
+        @media (max-width: 480px) {
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .brand-text {
+                font-size: 2rem;
+            }
+
+            .header h1 {
+                font-size: 1.7rem;
+            }
+
+            .tab-button {
+                font-size: 0.9rem;
+                padding: 15px 10px;
+            }
+
+            .percentage-value {
+                font-size: 3rem;
+            }
+
+            .final-total {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Melhorias para impressão */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            
+            .pdf-button, .action-section {
+                display: none;
+            }
+
+            .header::before,
+            .card::before,
+            .summary-card::before,
+            .network-results-summary::before,
+            .total-section::before,
+            .percentage-section::before {
+                display: none;
+            }
+        }
+
+        /* Animações adicionais */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card, .summary-card {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .summary-card:nth-child(1) { animation-delay: 0.3s; }
+        .summary-card:nth-child(2) { animation-delay: 0.4s; }
+        .summary-card:nth-child(3) { animation-delay: 0.5s; }
+        .summary-card:nth-child(4) { animation-delay: 0.6s; }
+        .summary-card:nth-child(5) { animation-delay: 0.7s; }
+
+        /* Scroll suave */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Seleção de texto personalizada */
+        ::selection {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Focus outline personalizado */
+        *:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo">
+                    <div class="dollar">$</div>
+                </div>
+                <div class="brand-text">PRASAÚDE</div>
+            </div>
+            <h1>🏆 Dashboard de Comissões e Premiações</h1>
+            <p>Sistema completo de cálculo de rendimentos</p>
+        </div>
+
+        <div class="main-content">
+            <div class="controls">
+                <div class="calculation-tabs">
+                    <button class="tab-button active" onclick="switchTab('mensal')">📊 CÁLCULO MENSAL</button>
+                    <button class="tab-button" onclick="switchTab('diario')">📅 CÁLCULO DIÁRIO</button>
+                </div>
+
+                <div id="mensal-tab" class="tab-content active">
+                    <div class="control-group">
+                        <label for="vendasDiretas">Vendas Diretas (unidades):</label>
+                        <input type="number" id="vendasDiretas" min="0" value="1" placeholder="Ex: 10">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="valorUnitario">Valor Unitário (R$):</label>
+                        <input type="number" id="valorUnitario" step="0.01" value="147.00" placeholder="147.00">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="totalVendasValor">Total em Vendas (R$):</label>
+                        <input type="text" id="totalVendasValor" readonly style="background: #f7fafc; font-weight: 600;">
+                    </div>
+                </div>
+
+                <div id="diario-tab" class="tab-content">
+                    <div class="control-group">
+                        <label for="vendasDiarias">Vendas por Dia (unidades):</label>
+                        <input type="number" id="vendasDiarias" min="0" value="1" step="0.1" placeholder="Ex: 0.5">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="diasTrabalhados">Dias Trabalhados no Mês:</label>
+                        <input type="number" id="diasTrabalhados" min="1" max="31" value="30" placeholder="30">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="valorUnitarioDiario">Valor Unitário (R$):</label>
+                        <input type="number" id="valorUnitarioDiario" step="0.01" value="147.00" placeholder="147.00">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="projecaoMensal">Projeção Mensal:</label>
+                        <input type="text" id="projecaoMensal" readonly style="background: #f7fafc; font-weight: 600;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert">
+                <strong>📋 Regras de Premiação:</strong> A premiação é acumulativa. Vendeu 5 unidades = ganha 1 pote + R$ 100. Para 20 unidades = R$ 200 adicionais (total R$ 300). O bônus de 2% extra se aplica apenas nas vendas acima de 100 unidades.
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <div>Calculando resultados...</div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>📊 Estrutura de Comissões</h3>
+                    <table class="commission-table">
+                        <thead>
+                            <tr>
+                                <th>NÍVEL</th>
+                                <th>COMISSÃO</th>
+                                <th>DESCRIÇÃO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="level-1" data-label="Nível">1º Nível</td>
+                                <td data-label="Comissão"><strong>15%</strong></td>
+                                <td data-label="Descrição">Vendas diretas pelo seu link</td>
+                            </tr>
+                            <tr>
+                                <td class="level-2" data-label="Nível">2º Nível</td>
+                                <td data-label="Comissão"><strong>5%</strong></td>
+                                <td data-label="Descrição">Pessoas indicadas (2º nível)</td>
+                            </tr>
+                            <tr>
+                                <td class="level-3" data-label="Nível">3º Nível</td>
+                                <td data-label="Comissão"><strong>3%</strong></td>
+                                <td data-label="Descrição">Pessoas indicadas (3º nível)</td>
+                            </tr>
+                            <tr>
+                                <td class="level-4" data-label="Nível">4º Nível</td>
+                                <td data-label="Comissão"><strong>1%</strong></td>
+                                <td data-label="Descrição">Pessoas indicadas (4º nível)</td>
+                            </tr>
+                            <tr>
+                                <td class="level-5" data-label="Nível">5º Nível</td>
+                                <td data-label="Comissão"><strong>1%</strong></td>
+                                <td data-label="Descrição">Pessoas indicadas (5º nível)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <h3>🎁 Sistema de Premiação Mensal</h3>
+                    <table class="prize-table">
+                        <thead>
+                            <tr>
+                                <th>Unidades</th>
+                                <th>Prêmio</th>
+                                <th>Acumulado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-label="Unidades">5 un.</td>
+                                <td data-label="Prêmio">1 pote + R$ 100</td>
+                                <td data-label="Acumulado">1 pote + R$ 100</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Unidades">20 un.</td>
+                                <td data-label="Prêmio">+ R$ 200</td>
+                                <td data-label="Acumulado">1 pote + R$ 300</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Unidades">30 un.</td>
+                                <td data-label="Prêmio">+ R$ 300</td>
+                                <td data-label="Acumulado">1 pote + R$ 600</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Unidades">40 un.</td>
+                                <td data-label="Prêmio">+ R$ 400</td>
+                                <td data-label="Acumulado">1 pote + R$ 1.000</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Unidades">50 un.</td>
+                                <td data-label="Prêmio">+ R$ 500</td>
+                                <td data-label="Acumulado">1 pote + R$ 1.500</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Unidades">70 un.</td>
+                                <td data-label="Prêmio">+ R$ 500</td>
+                                <td data-label="Acumulado">1 pote + R$ 2.000</td>
+                            </tr>
+                            <tr>
+                                <td data-label="Unidades">100+ un.</td>
+                                <td data-label="Prêmio">+2% nas vendas extras</td>
+                                <td data-label="Acumulado">1 pote + R$ 2.000 + 2%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="network-section">
+                    <h3>🌐 Comissões da Rede (Níveis 2 ao 5)</h3>
+                    <p style="margin-bottom: 25px; color: #666; text-align: center; font-size: 1.1rem; font-weight: 600;">Configure as vendas de cada nível da sua rede</p>
+                    
+                    <div class="network-controls">
+                        <div class="network-level-card">
+                            <div class="network-level-info">
+                                <div class="network-level-title">
+                                    <span class="network-level-badge badge-level-2">2º NÍVEL</span>
+                                </div>
+                                <div class="network-level-subtitle">Comissão de 5% sobre vendas</div>
+                            </div>
+                            <div class="network-level-input">
+                                <input type="number" id="nivel2" min="0" value="0" placeholder="Unidades">
+                            </div>
+                        </div>
+
+                        <div class="network-level-card">
+                            <div class="network-level-info">
+                                <div class="network-level-title">
+                                    <span class="network-level-badge badge-level-3">3º NÍVEL</span>
+                                </div>
+                                <div class="network-level-subtitle">Comissão de 3% sobre vendas</div>
+                            </div>
+                            <div class="network-level-input">
+                                <input type="number" id="nivel3" min="0" value="0" placeholder="Unidades">
+                            </div>
+                        </div>
+
+                        <div class="network-level-card">
+                            <div class="network-level-info">
+                                <div class="network-level-title">
+                                    <span class="network-level-badge badge-level-4">4º NÍVEL</span>
+                                </div>
+                                <div class="network-level-subtitle">Comissão de 1% sobre vendas</div>
+                            </div>
+                            <div class="network-level-input">
+                                <input type="number" id="nivel4" min="0" value="0" placeholder="Unidades">
+                            </div>
+                        </div>
+
+                        <div class="network-level-card">
+                            <div class="network-level-info">
+                                <div class="network-level-title">
+                                    <span class="network-level-badge badge-level-5">5º NÍVEL</span>
+                                </div>
+                                <div class="network-level-subtitle">Comissão de 1% sobre vendas</div>
+                            </div>
+                            <div class="network-level-input">
+                                <input type="number" id="nivel5" min="0" value="0" placeholder="Unidades">
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="network-table" id="networkTable">
+                        <thead>
+                            <tr>
+                                <th>Nível</th>
+                                <th>Unidades</th>
+                                <th>Valor Total</th>
+                                <th>Comissão (%)</th>
+                                <th>Valor Comissão</th>
+                            </tr>
+                        </thead>
+                        <tbody id="networkTableBody">
+                        </tbody>
+                    </table>
+
+                    <div class="network-results-summary">
+                        <h4>💰 Total das Comissões da Rede</h4>
+                        <div class="total-value" id="totalRedeDisplay">R$ 0,00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h4>💰 Comissão Direta (15%)</h4>
+                    <div class="value" id="comissaoBase">R$ 0,00</div>
+                </div>
+                
+                <div class="summary-card">
+                    <h4>🎁 Premiação Mensal</h4>
+                    <div class="value" id="premiacaoTotal">R$ 0,00</div>
+                </div>
+                
+                <div class="summary-card">
+                    <h4>⚡ Bônus 2% Extra</h4>
+                    <div class="value" id="bonusExtra">R$ 0,00</div>
+                </div>
+                
+                <div class="summary-card">
+                    <h4>🌐 Comissão da Rede</h4>
+                    <div class="value" id="comissaoRede">R$ 0,00</div>
+                </div>
+                
+                <div class="summary-card">
+                    <h4>📦 Potes Extras</h4>
+                    <div class="value" id="potesExtras">0</div>
+                </div>
+            </div>
+
+            <div class="total-section">
+                <h3>💎 RESUMO FINANCEIRO COMPLETO</h3>
+                
+                <div style="margin: 35px 0;">
+                    <div style="font-size: 1.6rem; margin-bottom: 20px; opacity: 0.95; font-weight: 700; position: relative; z-index: 2;">RENDA TOTAL MENSAL</div>
+                    <div class="final-total" id="rendaTotal">R$ 0,00</div>
+                </div>
+
+                <div class="percentage-section">
+                    <div class="percentage-title">📈 PERCENTUAL DE GANHO SOBRE VENDAS</div>
+                    <div class="percentage-value" id="percentualGanho">0%</div>
+                    <div class="percentage-explanation" id="explicacaoPercentual">Quanto você ganha do que vende</div>
+                </div>
+            </div>
+
+            <div class="action-section">
+                <h4>📄 Gerar Relatório</h4>
+                <button class="pdf-button" onclick="gerarPNG()">📸 SALVAR IMAGEM</button>
+            </div>
+
+            <div id="premiasAlcancadas" style="margin-top: 25px;"></div>
+        </div>
+    </div>
+
+    <!-- Scripts necessários -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        // Configuração da premiação
+        const premiacaoConfig = [
+            { unidades: 5, premio: 100, temPote: true },
+            { unidades: 20, premio: 200, temPote: false },
+            { unidades: 30, premio: 300, temPote: false },
+            { unidades: 40, premio: 400, temPote: false },
+            { unidades: 50, premio: 500, temPote: false },
+            { unidades: 70, premio: 500, temPote: false },
+            { unidades: 100, premio: 0, temPote: false, comissaoExtra: 2 }
+        ];
+
+        // Função para alternar entre abas
+        function switchTab(tabName) {
+            // Remover classe active de todos os botões e conteúdos
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Adicionar classe active no botão e conteúdo selecionado
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Recalcular quando trocar de aba
+            setTimeout(calcular, 100);
+        }
+
+        // Função para mostrar loading
+        function mostrarLoading(show = true) {
+            const loading = document.getElementById('loading');
+            const dashboardGrid = document.querySelector('.dashboard-grid');
+            const summaryGrid = document.querySelector('.summary-grid');
+            
+            if (show) {
+                loading.style.display = 'block';
+                dashboardGrid.style.opacity = '0.3';
+                summaryGrid.style.opacity = '0.3';
+            } else {
+                loading.style.display = 'none';
+                dashboardGrid.style.opacity = '1';
+                summaryGrid.style.opacity = '1';
+            }
+        }
+
+        // Função principal de cálculo
+        function calcular() {
+            // Mostrar loading para valores maiores
+            const vendasInput = document.getElementById('vendasDiretas').value || document.getElementById('vendasDiarias').value;
+            if (parseInt(vendasInput) > 50) {
+                mostrarLoading(true);
+            }
+
+            setTimeout(() => {
+                let vendas, valorUnitario;
+                
+                // Verificar qual aba está ativa
+                const isTabDiaria = document.getElementById('diario-tab').classList.contains('active');
+                
+                if (isTabDiaria) {
+                    // Cálculo baseado em vendas diárias
+                    const vendasPorDia = parseFloat(document.getElementById('vendasDiarias').value) || 0;
+                    const diasTrabalhados = parseInt(document.getElementById('diasTrabalhados').value) || 30;
+                    valorUnitario = parseFloat(document.getElementById('valorUnitarioDiario').value) || 147.00;
+                    
+                    vendas = Math.round(vendasPorDia * diasTrabalhados);
+                    
+                    // Atualizar projeção mensal
+                    document.getElementById('projecaoMensal').value = `${vendas} unidades (${vendasPorDia}/dia × ${diasTrabalhados} dias)`;
+                } else {
+                    // Cálculo mensal tradicional
+                    vendas = parseInt(document.getElementById('vendasDiretas').value) || 0;
+                    valorUnitario = parseFloat(document.getElementById('valorUnitario').value) || 147.00;
+                }
+                
+                // Cálculo total de vendas em valor
+                const totalVendasValor = vendas * valorUnitario;
+                if (!isTabDiaria) {
+                    document.getElementById('totalVendasValor').value = formatMoney(totalVendasValor);
+                }
+
+                // Comissão base (15%)
+                const comissaoBase = totalVendasValor * 0.15;
+                
+                // Calcular premiação
+                let premiacaoTotal = 0;
+                let potesExtras = 0;
+                let premiasAlcancadas = [];
+
+                premiacaoConfig.forEach(config => {
+                    if (vendas >= config.unidades && !config.comissaoExtra) {
+                        premiacaoTotal += config.premio;
+                        if (config.temPote) {
+                            potesExtras += 1;
+                        }
+                        premiasAlcancadas.push({
+                            unidades: config.unidades,
+                            premio: config.premio,
+                            temPote: config.temPote
+                        });
+                    }
+                });
+
+                // Cálculo do bônus 2% extra (separado)
+                let bonusExtra = 0;
+                if (vendas > 100) {
+                    const vendasExtras = vendas - 100;
+                    const faturamentoExtra = vendasExtras * valorUnitario;
+                    bonusExtra = faturamentoExtra * 0.02;
+                }
+
+                // Cálculo das comissões da rede
+                const nivel2 = parseInt(document.getElementById('nivel2').value) || 0;
+                const nivel3 = parseInt(document.getElementById('nivel3').value) || 0;
+                const nivel4 = parseInt(document.getElementById('nivel4').value) || 0;
+                const nivel5 = parseInt(document.getElementById('nivel5').value) || 0;
+
+                const comissaoNivel2 = (nivel2 * valorUnitario) * 0.05;
+                const comissaoNivel3 = (nivel3 * valorUnitario) * 0.03;
+                const comissaoNivel4 = (nivel4 * valorUnitario) * 0.01;
+                const comissaoNivel5 = (nivel5 * valorUnitario) * 0.01;
+
+                const totalComissaoRede = comissaoNivel2 + comissaoNivel3 + comissaoNivel4 + comissaoNivel5;
+
+                // Atualizar tabela da rede
+                atualizarTabelaRede(
+                    [nivel2, nivel3, nivel4, nivel5],
+                    [comissaoNivel2, comissaoNivel3, comissaoNivel4, comissaoNivel5],
+                    valorUnitario
+                );
+
+                const totalGeral = comissaoBase + totalComissaoRede + premiacaoTotal + bonusExtra;
+
+                // Atualizar interface com animação
+                animarValor('comissaoBase', comissaoBase);
+                animarValor('premiacaoTotal', premiacaoTotal);
+                animarValor('bonusExtra', bonusExtra);
+                animarValor('comissaoRede', totalComissaoRede
